@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="spigot-current">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Minecraft/Minecraft_Spigot_Server/spigot-current.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Minecraft/Minecraft_Spigot_Server/spigot-current.jar!/" />
+    </SOURCES>
+  </library>
+</component>

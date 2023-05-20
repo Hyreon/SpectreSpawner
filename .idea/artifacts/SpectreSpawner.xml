@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SpectreSpawner">
+    <output-path>$PROJECT_DIR$/out/artifacts/SpectreSpawner</output-path>
+    <root id="archive" name="SpectreSpawner.jar">
+      <element id="module-output" name="SpectreSpawner" />
+    </root>
+  </artifact>
+</component>
