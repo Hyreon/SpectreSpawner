@@ -41,7 +41,7 @@ public class SpectreSpawn extends JavaPlugin {
                     integrate(uuid);
                 }
             } catch (ConcurrentModificationException e) {
-                Bukkit.getLogger().log(Level.WARNING, "Concurrent modification when trying to display combat status. Retry already scheduled.");
+                Bukkit.getLogger().log(Level.WARNING, "Concurrent modification when trying to display spawn status. Retry already scheduled.");
             }
         }, 20L, 20L);
 
@@ -54,23 +54,21 @@ public class SpectreSpawn extends JavaPlugin {
 
     public void deintegrate(UUID uuid) {
         try {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) return;
             spectreClocks.put(uuid, 30L);
             if (spectrePreviousGamemode.get(uuid) == null) {
-                GameMode gameMode = Bukkit.getPlayer(uuid).getGameMode();
+                GameMode gameMode = player.getGameMode();
                 if (gameMode == GameMode.SPECTATOR) {
                     gameMode = Bukkit.getDefaultGameMode();
                 }
                 spectrePreviousGamemode.put(uuid, gameMode);
             }
-            Bukkit.getPlayer(uuid).setGameMode(GameMode.SPECTATOR);
+            player.setGameMode(GameMode.SPECTATOR);
         } catch (ConcurrentModificationException e) {
             Bukkit.getLogger().log(Level.WARNING, "Concurrent modification when trying to make " + uuid + " a spectre. Retrying...");
             Bukkit.getScheduler().scheduleSyncDelayedTask(this,
-                    new Runnable() {
-                        public void run() {
-                            deintegrate(uuid);
-                        }
-                    }, 9L);
+                    () -> deintegrate(uuid), 9L);
         }
 
     }
@@ -89,11 +87,7 @@ public class SpectreSpawn extends JavaPlugin {
         } catch (ConcurrentModificationException e) {
             Bukkit.getLogger().log(Level.WARNING, "Concurrent modification when trying to integrate " + uuid + ". Retrying...");
             Bukkit.getScheduler().scheduleSyncDelayedTask(this,
-                    new Runnable() {
-                        public void run() {
-                            integrate(uuid);
-                        }
-                    }, 8L);
+                    () -> integrate(uuid), 8L);
         }
     }
 }

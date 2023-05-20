@@ -25,13 +25,13 @@ public class SpectreListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
-        if (!spectreSpawn.spectreClocks.keySet().contains(e.getPlayer().getUniqueId())) return;
+        if (!spectreSpawn.spectreClocks.containsKey(e.getPlayer().getUniqueId())) return;
         spectreSpawn.integrate(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if (!spectreSpawn.spectreClocks.keySet().contains(e.getPlayer().getUniqueId())) return;
+        if (!spectreSpawn.spectreClocks.containsKey(e.getPlayer().getUniqueId())) return;
         if (e.getTo() == null) return;
         if (e.getTo().getY() < e.getFrom().getY()) {
             spectreSpawn.integrate(e.getPlayer().getUniqueId());
