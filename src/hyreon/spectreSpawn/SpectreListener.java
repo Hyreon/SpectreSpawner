@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Statistic;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -17,24 +18,27 @@ public class SpectreListener implements Listener {
         this.spectreSpawn = spectreSpawn;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        spectreSpawn.deintegrate(e.getPlayer().getUniqueId());
+        if (e.getPlayer().getGameMode() == GameMode.SPECTATOR) return;
+        Spectre.deintegrate(e.getPlayer().getUniqueId(), e.getJoinMessage());
         e.setJoinMessage(null);
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
-        if (!spectreSpawn.spectreClocks.containsKey(e.getPlayer().getUniqueId())) return;
-        spectreSpawn.integrate(e.getPlayer().getUniqueId());
+        if (!Spectre.playerIsSpectre(e.getPlayer())) return;
+        Spectre.integrate(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if (!spectreSpawn.spectreClocks.containsKey(e.getPlayer().getUniqueId())) return;
+        if (!Spectre.playerIsSpectre(e.getPlayer())) return;
         if (e.getTo() == null) return;
-        if (e.getTo().getY() < e.getFrom().getY()) {
-            spectreSpawn.integrate(e.getPlayer().getUniqueId());
+        if (e.getTo().getX() != e.getFrom().getX() ||
+                e.getTo().getY() != e.getFrom().getY() ||
+                e.getTo().getZ() != e.getFrom().getZ()) {
+            Spectre.integrate(e.getPlayer().getUniqueId());
         }
         e.getTo().setX(e.getFrom().getX());
         e.getTo().setY(e.getFrom().getY());
